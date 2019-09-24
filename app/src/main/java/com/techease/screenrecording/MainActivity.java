@@ -30,7 +30,11 @@ import android.widget.ToggleButton;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private MediaRecorder mMediaRecorder;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_PERMISSIONS = 10;
+
+    String ScreenRecordingSavePathInDevice = null;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -165,12 +171,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecorder() {
         try {
+
+
+
+            String out = new SimpleDateFormat("dd-MM-yyyy hh-mm-ss").format(new Date());
+            File rootFile = new File(Environment.getExternalStorageDirectory().toString(), "AAA Screen Recording");
+
+            if (!rootFile.exists()) {
+                rootFile.mkdir();
+            }
+
+
+            File sourceFile = new File(rootFile, out + "video.mp4");
+
+            ScreenRecordingSavePathInDevice = sourceFile.getAbsolutePath();
+
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mMediaRecorder.setOutputFile(Environment
-                    .getExternalStoragePublicDirectory(Environment
-                            .DIRECTORY_DOWNLOADS) + "/video.mp4");
+            mMediaRecorder.setOutputFile(ScreenRecordingSavePathInDevice);
             mMediaRecorder.setVideoSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
