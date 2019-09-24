@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ScreenRecording</string>
+    <string name="label_permissions">Please enable Microphone and Storage permissions.</string>
+
+</resources>
